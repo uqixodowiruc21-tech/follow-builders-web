@@ -17,23 +17,23 @@
 
 ### 若打开网址提示 “There isn't a GitHub Pages site here”
 
-说明 **仓库里还没成功启用 Pages**，或 **部署工作流还没跑成功**。请按顺序做：
+说明 **还没成功发布站点**。本仓库使用 **推送到 `gh-pages` 分支** 的方式发布（不依赖 `configure-pages`，避免部分账号下 Actions 源报错）。
 
-1. 打开： [Settings → Pages](https://github.com/uqixodowiruc21-tech/follow-builders-web/settings/pages)
-2. 在 **Build and deployment** 里，把 **Source** 设为 **GitHub Actions**。
-3. 打开 [Actions](https://github.com/uqixodowiruc21-tech/follow-builders-web/actions)，进入 **Deploy to GitHub Pages**，点 **Re-run all jobs**。
-4. 等 workflow **全部绿色** 后，再等约 1 分钟，再访问：  
+请按顺序做：
+
+1. 打开 [Actions](https://github.com/uqixodowiruc21-tech/follow-builders-web/actions)，确认 **Deploy to GitHub Pages** 有一次 **全部绿色** 的运行（推送 `main` 会自动触发）。
+2. 打开 [Settings → Pages](https://github.com/uqixodowiruc21-tech/follow-builders-web/settings/pages)。
+3. **Build and deployment → Source** 选择 **Deploy from a branch**（从分支部署）。
+4. **Branch** 选 **`gh-pages`**，文件夹选 **`/ (root)`**，保存。
+5. 等约 1 分钟后再访问：  
    `https://uqixodowiruc21-tech.github.io/follow-builders-web/`
 
-若第 3 步仍失败，把失败步骤的日志发出来即可。
+> 若之前选的是 **GitHub Actions**，请改成 **Deploy from a branch**，否则 Pages 会一直等不到站点文件。
 
 ### 部署方式
 
-本仓库通过 GitHub Actions 自动部署到 GitHub Pages（见 `.github/workflows/pages.yml`）。
-
-**首次部署前**必须在仓库里开启一次（只需做一次）：
-
-- Settings → Pages → Source 选择 **GitHub Actions**
+- Workflow：`.github/workflows/pages.yml` 使用 [peaceiris/actions-gh-pages](https://github.com/peaceiris/actions-gh-pages) 把 `index.html` 等静态文件推到 **`gh-pages`** 分支。
+- Pages：**Source 必须为「从分支部署」+ 分支 `gh-pages`**。
 
 ### 本地运行（可选）
 
