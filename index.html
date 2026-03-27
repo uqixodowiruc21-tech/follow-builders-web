@@ -287,7 +287,9 @@
   </div>
 
   <script>
+    // 优先使用与本页同目录的 feed-x.json（本地已拉取的最新快照），失败再请求上游
     const FEED_URLS = [
+      "feed-x.json",
       "https://raw.githubusercontent.com/zarazhangrui/follow-builders/main/feed-x.json",
       "https://cdn.jsdelivr.net/gh/zarazhangrui/follow-builders@main/feed-x.json"
     ];
