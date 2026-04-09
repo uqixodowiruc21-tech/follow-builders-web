@@ -1,6 +1,6 @@
 ## Follow Builders Web（GitHub Pages）
 
-这是一个**纯静态网页**：每天从开源项目 [`zarazhangrui/follow-builders`](https://github.com/zarazhangrui/follow-builders) 拉取 `feed-x.json`，展示：
+这是一个**纯静态网页**：每次打开或点击「拉取最新数据」都会从开源项目 [`zarazhangrui/follow-builders`](https://github.com/zarazhangrui/follow-builders) **在线拉取** `feed-x.json`（不使用仓库内旧快照），展示：
 
 - 数据概况（生成时间、回望窗口、推文数量）
 - 今日总结（页面本地规则整理）
