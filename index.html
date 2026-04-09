@@ -243,7 +243,7 @@
       <p class="subtitle">
         数据与账号列表来自开源项目
         <a href="https://github.com/zarazhangrui/follow-builders" target="_blank" rel="noopener">zarazhangrui/follow-builders</a>
-        的 <code>feed-x.json</code>（约 24 小时窗口，每日更新）。
+        的 <code>feed-x.json</code>（约 24 小时窗口；每次打开页面或点「拉取最新数据」都会<strong>在线请求上游</strong>，不读本地旧快照）。
       </p>
       <div class="toolbar">
         <button type="button" class="primary" id="btnLoad">拉取最新数据</button>
@@ -287,9 +287,8 @@
   </div>
 
   <script>
-    // 优先使用与本页同目录的 feed-x.json（本地已拉取的最新快照），失败再请求上游
-    const FEED_URLS = [
-      "feed-x.json",
+    // 始终从上游拉取；URL 加时间戳避免浏览器/CDN 缓存旧内容
+    const FEED_BASE_URLS = [
       "https://raw.githubusercontent.com/zarazhangrui/follow-builders/main/feed-x.json",
       "https://cdn.jsdelivr.net/gh/zarazhangrui/follow-builders@main/feed-x.json"
     ];
@@ -495,10 +494,17 @@
       return escapeHtml(s).replace(/'/g, "&#39;");
     }
 
+    function withCacheBust(url) {
+      const u = new URL(url, location.href);
+      u.searchParams.set("t", String(Date.now()));
+      return u.href;
+    }
+
     async function fetchFeed() {
       let lastErr = null;
-      for (const url of FEED_URLS) {
+      for (const base of FEED_BASE_URLS) {
         try {
+          const url = withCacheBust(base);
           const res = await fetch(url, { cache: "no-store" });
           if (!res.ok) throw new Error(res.status + " " + res.statusText);
           return await res.json();
@@ -519,7 +525,9 @@
       try {
         const data = await fetchFeed();
         render(data);
-        status.textContent = "已更新。";
+        status.textContent = data.generatedAt
+          ? "已拉取最新数据（上游生成时间：" + formatTime(data.generatedAt) + "）"
+          : "已更新。";
       } catch (e) {
         status.textContent = "加载失败：" + (e && e.message ? e.message : String(e)) + "。请用本地服务打开本页或检查网络。";
         status.classList.add("error");
